@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"log"
+	"time"
 
 	"github.com/docker/cli/cli/command"
 	"github.com/docker/cli/cli/command/stack/loader"
@@ -43,6 +44,34 @@ func main() {
 	}
 
 	log.Printf("deployed successfully")
+
+	stacks, err := swarm.GetStacks(cli)
+	if err != nil {
+		log.Fatalf("failure getting stacks: %s", err)
+	}
+
+	started := false
+
+	for tries := 0; tries < 5; tries++ {
+
+		for _, stack := range stacks {
+			started = stack.Name == ns
+			if started {
+				break
+			}
+		}
+
+		if !started {
+			log.Printf("stack is not started yet, try: %d", tries)
+			time.Sleep(5 * time.Second)
+		}
+	}
+
+	if !started {
+		log.Fatal("stack is not started yet")
+	}
+
+	log.Printf("stack has started")
 
 	err = swarm.RunRemove(cli, options.Remove{Namespaces: []string{ns}})
 	if err != nil {
