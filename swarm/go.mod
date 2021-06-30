@@ -1,4 +1,4 @@
-module github.com/chiptus/test-swarm-lib
+module github.com/chiptus/test-swarm-lib/swarm
 
 go 1.16
 
@@ -14,6 +14,8 @@ require (
 	github.com/fvbommel/sortorder v1.0.2 // indirect
 	github.com/google/go-cmp v0.5.6 // indirect
 	github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510 // indirect
+	github.com/imdario/mergo v0.3.12 // indirect
+	github.com/mitchellh/mapstructure v1.4.1 // indirect
 	github.com/moby/sys/mount v0.2.0 // indirect
 	github.com/moby/term v0.0.0-20210619224110-3f7ff695adc6 // indirect
 	github.com/morikuni/aec v1.0.0 // indirect
@@ -21,6 +23,7 @@ require (
 	github.com/spf13/cobra v1.1.3 // indirect
 	github.com/stretchr/testify v1.7.0 // indirect
 	github.com/theupdateframework/notary v0.7.0 // indirect
+	github.com/xeipuuv/gojsonschema v1.2.0 // indirect
 	golang.org/x/sys v0.0.0-20210630005230-0f9fa26af87c // indirect
 	golang.org/x/text v0.3.6 // indirect
 	google.golang.org/grpc v1.39.0 // indirect
