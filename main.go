@@ -5,25 +5,27 @@ import (
 	"log"
 
 	"github.com/docker/cli/cli/command"
-	"github.com/docker/cli/cli/command/stack"
 	"github.com/docker/cli/cli/command/stack/options"
-	"github.com/docker/cli/cli/compose/types"
+	"github.com/docker/cli/cli/command/stack/swarm"
+	composetypes "github.com/docker/cli/cli/compose/types"
 	"github.com/docker/cli/cli/flags"
-	"github.com/spf13/pflag"
 )
 
 func main() {
 	cli, err := command.NewDockerCli(command.WithStandardStreams())
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("error creating client %s", err)
 	}
 
-	cli.Initialize(flags.NewClientOptions())
-
-	flagset := pflag.NewFlagSet("new", pflag.ContinueOnError)
-	err = stack.RunDeploy(cli, flagset, &types.Config{}, command.OrchestratorSwarm, options.Deploy{})
+	err = cli.Initialize(flags.NewClientOptions())
 	if err != nil {
-		log.Printf("error... %s", err)
+		log.Fatalf("error init client %s", err)
+	}
+
+	// flagset := pflag.NewFlagSet("new", pflag.ContinueOnError)
+	err = swarm.RunDeploy(cli, options.Deploy{ResolveImage: swarm.ResolveImageAlways}, &composetypes.Config{})
+	if err != nil {
+		log.Fatalf("error deploying %s", err)
 	}
 
 	fmt.Println("success!")
