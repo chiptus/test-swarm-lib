@@ -22,8 +22,10 @@ func main() {
 		log.Fatalf("error init client %s", err)
 	}
 
+	ns := "test"
+
 	opts := options.Deploy{
-		Namespace:    "test",
+		Namespace:    ns,
 		ResolveImage: swarm.ResolveImageAlways,
 		Composefiles: []string{"./docker-compose.yml"},
 	}
@@ -36,6 +38,15 @@ func main() {
 	if err != nil {
 		log.Fatalf("error deploying; err=%s", err)
 	}
+
+	log.Printf("deployed successfully")
+
+	err = swarm.RunRemove(cli, options.Remove{Namespaces: []string{ns}})
+	if err != nil {
+		log.Fatalf("error removing; err=%s", err)
+	}
+
+	log.Printf("removed successfully")
 
 	fmt.Println("success!")
 }
