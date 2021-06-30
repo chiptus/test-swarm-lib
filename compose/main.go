@@ -41,11 +41,7 @@ func main() {
 
 	ctx := context.Background()
 
-	// consumer := formatter.NewLogConsumer(ctx, os.Stdout, true, true)
-
-	createOpt := api.CreateOptions{}
-
-	err = service.Up(ctx, project, api.UpOptions{Start: api.StartOptions{}, Create: createOpt})
+	err = service.Up(ctx, project, api.UpOptions{})
 	if err != nil {
 		log.Fatalf("error deploying; err=%s", err)
 	}
