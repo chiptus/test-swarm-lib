@@ -3,3 +3,6 @@ version: "3.1"
 services:
   test:
     image: "nginx"
+    ports:
+      - 30778:30778
+      - 9000:9000

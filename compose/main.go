@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"log"
 
@@ -13,8 +14,10 @@ import (
 )
 
 func main() {
+	errStream := &bytes.Buffer{}
+	outputStream := &bytes.Buffer{}
 
-	dockercli, err := command.NewDockerCli(command.WithStandardStreams())
+	dockercli, err := command.NewDockerCli(command.WithErrorStream(errStream), command.WithOutputStream(outputStream))
 	if err != nil {
 		log.Fatalf("error creating client %s", err)
 	}
@@ -54,6 +57,12 @@ func main() {
 		log.Fatalf("error removing; err=%s", err)
 	}
 
-	log.Printf("removed successfully")
+	errOutput := errStream.String()
+	if errOutput != "" {
+		log.Fatalf("failed: %s", errOutput)
+	}
+
+	log.Println("success!")
+	log.Println(outputStream.String())
 
 }

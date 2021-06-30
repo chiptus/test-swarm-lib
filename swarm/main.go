@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"bytes"
 	"log"
 
 	"github.com/docker/cli/cli/command"
@@ -12,7 +12,10 @@ import (
 )
 
 func main() {
-	cli, err := command.NewDockerCli(command.WithStandardStreams())
+	errStream := &bytes.Buffer{}
+	outputStream := &bytes.Buffer{}
+
+	cli, err := command.NewDockerCli(command.WithErrorStream(errStream), command.WithOutputStream(outputStream))
 	if err != nil {
 		log.Fatalf("error creating client %s", err)
 	}
@@ -48,5 +51,11 @@ func main() {
 
 	log.Printf("removed successfully")
 
-	fmt.Println("success!")
+	errOutput := errStream.String()
+	if errOutput != "" {
+		log.Fatalf("failed: %s", errOutput)
+	}
+
+	log.Println("success!")
+	log.Println(outputStream.String())
 }
